@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>AddressBook Application</title>
+        <h1>Created by Max Curkovic, 101139937</h1>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+
+    <body>
+        <h1>Welcome to the AddressBook application</h1>
+        <a href="/addaddressbook" th:href="@{/addaddressbook}">Add AddressBook</a>
+
+        <h2>Created AddressBooks</h2>
+        <ul>
+            <li th:each="addressbook : ${AddressBooks}">
+                <p><a href="/displayaddressbook" th:href="@{/displayaddressbook(id=${addressbook.id})}">AddressBook#<span th:text="${addressbook.id}"></span></a></p>
+            </li>
+        </ul>
+    </body>
+
+</html>

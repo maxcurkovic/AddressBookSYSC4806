@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Add AddressBook</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <style>
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>AddressBook ID: <span th:text="${AddressBook.getId()}"></span></h1>
+        <a href="/addBuddy" th:href="@{/addBuddy(id=${AddressBook.getId()})}">Add Buddy</a>
+        <a href="/removeBuddy" th:href="@{/removeBuddy(id=${AddressBook.getId()})}">Remove Buddy</a>
+        <h2>Buddy List:</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Phone Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="buddy : ${AddressBook.getAddressBook()}">
+                    <td><span th:text="${buddy.getId()}"></span></td>
+                    <td><span th:text="${buddy.getName()}"></span></td>
+                    <td><span th:text="${buddy.getAddress()}"></span></td>
+                    <td><span th:text="${buddy.getPhoneNumber()}"></span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <footer>
+            <a href="/" th:href="@{/}">back</a>
+        </footer>
+    </body>
+
+</html>

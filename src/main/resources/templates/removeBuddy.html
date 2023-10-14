@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Remove Buddy</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+<h1>Remove Buddy</h1>
+<form action="#" th:action="@{/removingBuddy}" th:object="${BuddyDTO}" method="post">
+    <p>AddressBookId: <input type="text" th:field="*{addressBookId}" value="${AddressId}" readonly/></p>
+    <p>ID: <input type="text" th:field="*{buddyId}" /></p>
+    <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+</form>
+<footer>
+    <a href="/" th:href="@{/}">Go Back</a>
+</footer>
+</body>
+</html>
