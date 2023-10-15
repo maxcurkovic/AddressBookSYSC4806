@@ -4,10 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.Optional;
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * SYSC 4806 Lab 4, Fall 2023
@@ -74,20 +77,52 @@ public class AppController {
         return "displayAddressBook";
     }
 
-    @DeleteMapping ("/removingBuddy")
-    public String removeBuddy(@ModelAttribute("BuddyDTO") BuddyInfoWithId buddyDTO, Model model) {
+    @PostMapping("/createdBuddyManual")
+    public String createdBuddy(@RequestParam Long id, @RequestParam String name, @RequestParam String number, RedirectAttributes redirectAttributes) {
+        Optional<AddressBook> ab = addressBookRepository.findById(id);
+        if (!ab.isPresent()){
+            return "redirect:/";
+        }
+        AddressBook addressBook = ab.get();
+        BuddyInfo buddy = new BuddyInfo("Test", "123 Test", "613-Test");
+        addressBook.addBuddy(buddy);
+        addressBookRepository.save(addressBook);
+        redirectAttributes.addAttribute("id", addressBook.getId());
+        return "redirect:displayaddressbook";
+    }
+
+    @PostMapping ("/removingBuddy")
+    public String removeBuddy(@ModelAttribute("BuddyDTO") BuddyInfoWithId buddyDTO, RedirectAttributes redirectAttributes) {
         Optional<AddressBook> ab = addressBookRepository.findById(buddyDTO.getAddressBookId());
         Optional<BuddyInfo> b = buddyInfoRepository.findById(buddyDTO.getBuddyId());
 
         if (!ab.isPresent() || !b.isPresent()){
-            return "index";
+            return "redirect:/";
         }
         AddressBook addressBook = ab.get();
         BuddyInfo buddy = b.get();
 
         addressBook.removeBuddy(buddy);
         addressBookRepository.save(addressBook);
-        model.addAttribute("AddressBook", addressBook);
-        return "displayAddressBook";
+        redirectAttributes.addAttribute("id", addressBook.getId());
+        return "redirect:displayaddressbook";
     }
+
+    @PostMapping("/removingBuddyManual")
+    public String deletedbuddy(@RequestParam Long id, @RequestParam String name, RedirectAttributes redirectAttributes) {
+        Optional<AddressBook> ab = addressBookRepository.findById(id);
+        Optional<BuddyInfo> b = buddyInfoRepository.findByName(name);
+
+        if (!ab.isPresent() || !b.isPresent()){
+            return "redirect:/";
+        }
+        AddressBook addressBook = ab.get();
+        BuddyInfo buddy = b.get();
+
+        addressBook.removeBuddy(buddy);
+        addressBookRepository.save(addressBook);
+        redirectAttributes.addAttribute("id", addressBook.getId());
+        return "redirect:displayaddressbook";
+    }
+
 }
